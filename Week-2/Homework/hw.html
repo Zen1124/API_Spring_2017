@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Classroom HW</title>
+    <style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <h2>Input a name!</h2>
+    <input type="text" id="name"></input>
+  </br>
+    <button onclick="createStudent();">Go</button>
+    <table id = "myTable">
+      <tr>
+        <th>Student Name</th>
+        <th>Age</th>
+        <th>Grades</th>
+        <th>Average</th>
+      </tr>
+    </table>
+    <script>
+    let grade = [];
+    let y = 0;
+
+    let createStudent = () => {
+      let student = [];
+      for (let member in student) {
+        delete student[member];
+      }
+      grade = [];
+
+
+      let name = $('#name').val();
+
+      for (x = 0; x < 10; x++) {
+        grade.push(Math.floor(Math.random() * (100 - 50 + 1) + 50));
+      }
+
+      let age = Math.floor(Math.random() * (18 - 10 +1) + 10);
+      let average = grade.reduce((a, b) => a + b, 0) / 10;
+
+      student = {
+      name: name,
+      age: age,
+      grade: grade,
+      average: average}
+
+      var table = document.getElementById("myTable");
+      var row = table.insertRow(-1);
+      var Name1 = row.insertCell(0);
+      var Age1 = row.insertCell(1);
+      var Grade1 = row.insertCell(2);
+      var Average1 = row.insertCell(3);
+      Name1.innerHTML = student.name;
+      Age1.innerHTML = student.age;
+      Grade1.innerHTML = student.grade;
+      Average1.innerHTML = student.average;
+    }
+    </script>
+  </body>
+</html>
