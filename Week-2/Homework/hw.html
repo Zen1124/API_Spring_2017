@@ -28,12 +28,6 @@
   </br>
     <button id="go">Go</button>
     <table id = "myTable">
-      <tr>
-        <th>Student Name</th>
-        <th>Age</th>
-        <th>Grades</th>
-        <th>Average</th>
-      </tr>
     </table>
     <script>
     let grade = [];
@@ -60,12 +54,12 @@
         average: average
       }
 
-      var table = document.getElementById("myTable");
-      var row = table.insertRow(-1);
-      var Name1 = row.insertCell(0);
-      var Age1 = row.insertCell(1);
-      var Grade1 = row.insertCell(2);
-      var Average1 = row.insertCell(3);
+      let table = document.getElementById("myTable");
+      let row = table.insertRow(-1);
+      let Name1 = row.insertCell(0);
+      let Age1 = row.insertCell(1);
+      let Grade1 = row.insertCell(2);
+      let Average1 = row.insertCell(3);
       Name1.innerHTML = student.name;
       Age1.innerHTML = student.age;
       Grade1.innerHTML = student.grade;
