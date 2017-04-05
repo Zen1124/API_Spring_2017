@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Black Jack</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <h1>Your Hand</h1>
+    <div id="div">
+    </div>
+    <button id="hit">Hit</button>
+    <button id="stay">Stay</button>
+    <div id="div2">
+      <h1>Dealer</h1>
+    </div>
+
+    <script>
+      let cards = [];
+      let cardsimages = [];
+      let cards2 = [];
+      let cards2images = [];
+
+      let check21 = (array) => {
+        if (array > 21) {
+          console.log("bust")
+          $("#div").append(`<h1>BUST</h1>`);
+        }
+      }
+
+      let check = (array) => {
+        let array2 = array;
+        for (let x = 0; x < array.length; x++) {
+          if (array[x] == "ACE") {
+            $("#div").append(`<button id = '1'>Make this ace have a value of 1</button>
+                              <button id = '11'>Make this ace have a value of 11</button>`);
+
+            $("#1").click( ()=> {
+              array[x] = 1;
+              $("#1").hide();
+              $("#11").hide();
+            });
+            $("#11").click( ()=> {
+              array[x] = 11;
+              $("#1").hide();
+              $("#11").hide();
+            });
+
+          } else if (array[x] == "KING") {
+              array[x] = 10;
+          } else if (array[x] == "QUEEN") {
+              array[x] = 10;
+          } else if (array[x] == "JACK") {
+              array[x] = 10;
+          }
+        }
+        let sum = 0;
+        for (let y = 0; y < array.length; y++) {
+          sum += array[y];
+          console.log(array[y]);
+          console.log(sum);
+          check21(sum);
+        }
+
+      }
+      $.get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1", (response) => {
+        $.get(`https://deckofcardsapi.com/api/deck/${response.deck_id}/draw/?count=2`, (response2) => {
+          let card1image = response2.cards[0].image;
+          let card2image = response2.cards[1].image;
+          let card1 = response2.cards[0].value;
+          let card2 = response2.cards[1].value;
+          cardsimages.push(card1image, card2image);
+          cards.push(card1, card2);
+          //console.log(cards);
+          check(cards);
+          //console.log(cards);
+          $("#div").append(`<img src = '${card1image}'/>
+                            <img src = '${card2image}'/>`);
+          $.get(`https://deckofcardsapi.com/api/deck/${response.deck_id}/draw/?count=2`, (response3) => {
+            let card1image = response3.cards[0].image;
+            let card2image = response3.cards[1].image;
+            let card1 = response3.cards[0].value;
+            cards2images.push(card1)
+            cards2.push(card1, card2);
+            //console.log(cards2);
+            $("#div2").append(`<br>
+                               <img src = 'http://ic.pics.livejournal.com/dailyafirmation/691132/529371/529371_original.jpg' height = 310px/>
+                               <img src = '${card2image}' height = 310px/>`);
+          })
+          $("#hit").click(() => {
+            $.get(`https://deckofcardsapi.com/api/deck/${response.deck_id}/draw/?count=1`, (response2) => {
+              let card1image = response2.cards[0].image;
+              let card1 = response2.cards[0].value;
+              cards.push(card1);
+              check(cards);
+              //console.log(cards);
+              $("#div").append(`<img src = '${card1image}'/>`);
+
+
+            })
+          })
+        })
+      });
+    </script>
+  </body>
+</html>
