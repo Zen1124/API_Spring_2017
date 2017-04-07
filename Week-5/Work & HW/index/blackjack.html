@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Black Jack</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <style>
+    #alert {
+      font-size: 300px;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="top">
+    </div>
+    <h1>Your Hand</h1>
+    <div id="div">
+    </div>
+    <button id="hit">Hit</button>
+    <button id="stay">Stand</button>
+    <div id="div2">
+      <h1>Dealer</h1>
+    </div>
+
+    <script>
+      let cards = [];
+      let cardsimages = [];
+      let cards2 = {};
+      cards2.cards = [];
+      cards2.total;
+      let cardsTotal;
+      let cards2images = [];
+      let checkNum = (num, array) => {
+        if (num.includes("2") || num.includes("3") || num.includes("4") || num.includes("5") || num.includes("6") || num.includes("7") || num.includes("8") || num.includes("9") || num.includes("10")) {
+          num = parseInt(num);
+          array.push(num);
+        } else {
+          array.push(num);
+        }
+      }
+
+      let check21Bot = (array) => {
+        if (array > 21) {
+          $("#top").append(`<h1 id = 'alert'>You win! Dealer Busts</h1>`);
+        } else if (array == 21) {
+          $("#top").append(`<h1 id = 'alert'>Dealer wins!</h1>`)
+        } else {
+          cards2.total = array;
+        }
+      }
+
+      let check21 =  (array) => {
+        if (array > 21) {
+          $("#top").append(`<h1 id = 'alert'>BUST</h1>`);
+        } else if (array == 21) {
+          //$("#top").append(`<h1 id = 'bust'>21</h1>`)
+        } else {
+          cardsTotal = array;
+        }
+      }
+
+
+      let check =  (array) => {
+        let array2 = array;
+        for (let x = 0; x < array.length; x++) {
+          if (array[x] == "ACE") {
+            $("#top").append(`<button id = '1'>Make this ace have a value of 1</button>
+                              <button id = '11'>Make this ace have a value of 11</button>`);
+
+            $("#1").click( ()=> {
+              array[x] = 1;
+              $("#1").hide();
+              $("#11").hide();
+              let sum = 0;
+              for (let y = 0; y < array.length; y++) {
+                sum += array[y];
+                parseInt(sum);
+              }
+              check21(sum);
+            });
+            $("#11").click( ()=> {
+              array[x] = 11;
+              $("#1").hide();
+              $("#11").hide();
+              let sum = 0;
+              for (let y = 0; y < array.length; y++) {
+                sum += array[y];
+                parseInt(sum);
+              }
+              check21(sum);
+            });
+
+          } else if (array[x] == "KING") {
+              array[x] = 10;
+              let sum = 0;
+              for (let y = 0; y < array.length; y++) {
+                sum += array[y];
+                parseInt(sum);
+              }
+              check21(sum);
+          } else if (array[x] == "QUEEN") {
+              array[x] = 10;
+              let sum = 0;
+              for (let y = 0; y < array.length; y++) {
+                sum += array[y];
+                parseInt(sum);
+              }
+              check21(sum);
+          } else if (array[x] == "JACK") {
+              array[x] = 10;
+              let sum = 0;
+              for (let y = 0; y < array.length; y++) {
+                sum += array[y];
+                parseInt(sum);
+              }
+              check21(sum);
+          } else {
+            let sum = 0;
+            for (let y = 0; y < array.length; y++) {
+              sum += array[y];
+              parseInt(sum);
+            }
+            check21(sum);
+          }
+        }
+
+      }
+
+      let checkBot =  (array) => {
+        for (let x = 0; x < array.length; x++) {
+          if (array[x] == "ACE") {
+              let sum = 0;
+              for (let y = 0; y < array.length; y++) {
+                sum += array[y];
+                parseInt(sum);
+                if (sum <= 10) {
+                  array[x] = 11
+                } else {
+                  array[x] = 1;
+                }
+                check21Bot(sum);
+              }
+              array2 = sum;
+          } else if (array[x] == "KING") {
+              array[x] = 10;
+              let sum = 0;
+              for (let y = 0; y < array.length; y++) {
+                sum += array[y];
+                parseInt(sum);
+              }
+              check21Bot(sum);
+          } else if (array[x] == "QUEEN") {
+              array[x] = 10;
+              let sum = 0;
+              for (let y = 0; y < array.length; y++) {
+                sum += array[y];
+                parseInt(sum);
+              }
+              check21Bot(sum);
+          } else if (array[x] == "JACK") {
+              array[x] = 10;
+              let sum = 0;
+              for (let y = 0; y < array.length; y++) {
+                sum += array[y];
+                parseInt(sum);
+              }
+              check21Bot(sum);
+          } else {
+            let sum = 0;
+            for (let y = 0; y < array.length; y++) {
+              sum += array[y];
+              parseInt(sum);
+            }
+            check21Bot(sum);
+          }
+        }
+      }
+
+      $.get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1", (response) => {
+        $.get(`https://deckofcardsapi.com/api/deck/${response.deck_id}/draw/?count=2`, (response2) => {
+          let card1image = response2.cards[0].image;
+          let card2image = response2.cards[1].image;
+          let card1 = response2.cards[0].value;
+          let card2 = response2.cards[1].value;
+          checkNum(card1, cards);
+          checkNum(card2, cards);
+          check(cards)
+          cardsimages.push(card1image, card2image);
+          $("#div").append(`<img src = '${card1image}'/>
+                            <img src = '${card2image}'/>`);
+          $.get(`https://deckofcardsapi.com/api/deck/${response.deck_id}/draw/?count=2`, (response3) => {
+            let card1image = response3.cards[0].image;
+            let card2image = response3.cards[1].image;
+            let card1 = response3.cards[0].value;
+            let card2 = response3.cards[1].value;
+            cards2images.push(card1image, card2image);
+            checkNum(card1, cards2.cards);
+            checkNum(card2, cards2.cards);
+            checkBot(cards2.cards)
+            $("#div2").append(`<img id = 'hidden' src = 'http://ic.pics.livejournal.com/dailyafirmation/691132/529371/529371_original.jpg' height = 300px/>
+                               <img src = '${card2image}' height = 300px/>`);
+          })
+          $("#hit").click(() => {
+            $.get(`https://deckofcardsapi.com/api/deck/${response.deck_id}/draw/?count=1`, (response2) => {
+              let card1image = response2.cards[0].image;
+              let card1 = response2.cards[0].value;
+              checkNum(card1, cards);
+              check(cards);
+              $("#div").append(`<img src = '${card1image}'/>`);
+            })
+          })
+
+          $("#stay").click(() => {
+            checkBot(cards2.cards);
+            if (cards2.total <= 15) {
+              $.get(`https://deckofcardsapi.com/api/deck/${response.deck_id}/draw/?count=1`, (response2) => {
+                let cardnewimage = response2.cards[0].image;
+                let cardnew = response2.cards[0].value;
+                checkNum(cardnew, cards2.cards);
+                checkBot(cards2.cards);
+                $("#div2").append(`<img src = '${cardnewimage}' height = 300px/>`);
+              })
+            } else {
+              if (cards2.total > cardsTotal) {
+                $("#top").append(`<h1 id = 'alert'>Dealer Wins</h1>`)
+                console.log(cards2.total);
+                console.log(cardsTotal);
+                $("#hidden").hide();
+                $("#div2").prepend(`<img src = '${cards2images[0]}' height = 300px/>`)
+
+              } else {
+                $("#top").append(`<h1 id = 'alert'>You Win!</h1>`)
+                console.log(cards2.total);
+                console.log(cardsTotal);
+                $("#hidden").hide();
+                $("#div2").prepend(`<img src = '${cards2images[0]}' height = 300px/>`)
+              }
+
+            }
+          })
+        })
+      });
+    </script>
+  </body>
+</html>
