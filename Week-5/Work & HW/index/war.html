@@ -73,6 +73,41 @@
           })
 
           $("#war").click(() => {
+            let lose = 0;
+            let win = 0;
+            let tie = 0;
+            console.log(cards.length)
+            for (let x = 0; x < cards.length; x++) {
+              if (cards2[x] > cards[x]) {
+                console.log(`You lose; You: ${cards[x]} Other: ${cards2[x]}`)
+                lose++;
+                cards2.push(cards[x]);
+                let index = cards.indexOf(cards[x]);
+                if (index > -1) {
+                    cards.splice(index, 1);
+                }
+                console.log(cards2[x]);
+                console.log(cards)
+              } else if (cards[x] > cards2[x]) {
+                console.log(`You win; You: ${cards[x]} Other: ${cards2[x]}`);
+                win++;
+                cards.push(cards2[x]);
+                let index = cards2.indexOf(cards2[x]);
+                if (index > -1) {
+                    cards2.splice(index, 1);
+                }
+                console.log(cards2[x]);
+                console.log(cards)
+              } else {
+                console.log(`War; You: ${cards[x]} Other: ${cards2[x]}`);
+                tie++;
+              }
+            }
+            console.log(cards.length)
+            console.log(cards2.length)
+            console.log(`Wins: ${win}`);
+            console.log(`Losses: ${lose}`);
+            console.log(`Ties: ${tie}`);
           })
         })
       })
