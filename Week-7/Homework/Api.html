@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>My Api</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous">
+    </script>
+    <style>
+    #alert {
+      color: red;
+    }
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    table#t01 th {
+      color: white;
+      background-color: black;
+    }
+    input {
+      height: 20px;
+      border: 2px solid red;
+      border-radius: 4px;
+    }
+    </style>
+  </head>
+  <body>
+    <table id = 't01'>
+      <tr>
+        <th>Subject</th>
+        <th>Picture</th>
+        <th>Message</th>
+        <th>User</th>
+        <th>Date</th>
+      </tr>
+    </table>
+    <div id = 'input'>
+      <p>Subject:</p> <input id = 'sub' placeholder="Your subject here" type = 'text'></input> <br>
+      <p>Picture Link:</p> <input id = 'pic' placeholder="Your link here" type = 'text'></input> <br>
+      <p>Message:</p> <input id = 'msg' placeholder="Your message here" type = 'text'></input> <br>
+      <p>Username:</p> <input id = 'user' placeholder="Your username here" type = 'text'></input> <br>
+      <p><b id = 'alert'>***All Fields Must be FILLED***</b></p>
+      <p><b id = 'alert3'>***Please put a valid message***</b></p>
+      <button id='send'>Send</button>
+    </div>
+      <p><b id = 'alert2'>***STOP SPAMMING***</b></p>
+    <script>
+      let public_key = 'WROOZymnx6FKMQbQzXbD';
+      let clicked = 0;
+      $('#alert').hide();
+      $('#alert2').hide();
+      $('#alert3').hide();
+      let addMsg = (sub, pic, msg, user, date) => {
+        let table = document.getElementById("t01");
+        let row = table.insertRow(-1);
+        let subTable = row.insertCell(0);
+        let picTable = row.insertCell(1);
+        let msgTable = row.insertCell(2);
+        let userTable = row.insertCell(3);
+        let dateTable = row.insertCell(4);
+        subTable.innerHTML = `<h1>${sub}</h1>`;
+        picTable.innerHTML = `<img src = '${pic}' height= "80px">`;
+        msgTable.innerHTML = msg;
+        userTable.innerHTML = user;
+        dateTable.innerHTML = date;
+        console.log(sub, pic, msg, user, date)
+      }
+
+      let pushToServer = (sub, pic, msg, user, date) => {
+        $.ajax({
+          url: 'https://data.sparkfun.com/input/WROOZymnx6FKMQbQzXbD',
+          type: 'post',
+          data: {
+              subject: sub,
+              picture: pic,
+              message: msg,
+              user: user,
+              date: date
+          },
+          headers: {
+              'Phant-Private-Key': 'Xd22jgvrxEs49R7Rz17y'
+          },
+          dataType: 'json',
+          success: (data) => {
+              console.info(data);
+          }
+       });
+      }
+
+      $.ajax({
+       url: 'http://data.sparkfun.com/output/WROOZymnx6FKMQbQzXbD',
+       jsonp: 'callback',
+       cache: true,
+       dataType: 'jsonp',
+       data: {
+         page: 1
+       },
+       success: (response) => {
+
+         for (let x = response.length - 1; x >= 0 ; x--) {
+           addMsg(response[x].subject, response[x].picture, response[x].message, response[x].user, response[x].date);
+         }
+       }
+      });
+
+      $('#send').click(() => {
+        let sub = $('#sub').val();
+        let pic = $('#pic').val();
+        let msg = $('#msg').val();
+        let user = $('#user').val();
+        if (msg == '' || user == '' || sub == '' || pic == '') {
+          $('#alert').show();
+          $('#msg').val("")
+          $('#user').val("");
+        } else if (clicked == 3) {
+            $('#input').hide();
+            $('#alert2').show();
+            clicked = 0;
+            setTimeout(() => {
+              $('#input').show();
+              $('#alert2').hide();
+            }, 3000);
+        } else {
+            if (msg.indexOf('<') > -1 && msg.indexOf('>') > -1 || user.indexOf('<') > -1 && user.indexOf('>') > -1 || sub.indexOf('<') > -1 && sub.indexOf('>') > -1 || pic.indexOf('<') > -1 && pic.indexOf('>') > -1) {
+              $('#alert3').show();
+            } else {
+              if (pic.indexOf('.jpg') > -1 || pic.indexOf('.png') > -1 || msg.indexOf('.gif') > -1)
+              $('#alert3').hide();
+              clicked++;
+              $('#alert').hide()
+              $('#sub').val("");
+              $('#pic').val("");
+              $('#msg').val("")
+              $('#user').val("");
+              let today = new Date();
+              let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+              let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+              let dateTime = date + ' '+ time;
+              addMsg(sub, pic, msg, user, dateTime);
+              pushToServer(sub, pic, msg, user, dateTime);
+            }
+        }
+
+
+      });
+    </script>
+  </body>
+</html>
