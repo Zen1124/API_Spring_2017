@@ -28,29 +28,36 @@
   </br>
     <button id="go">Go</button>
     <table id = "myTable">
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Grades</th>
+        <th>Average</th>
+      </tr>
+
     </table>
     <script>
-    let grade = [];
+    let grades = [];
     let y = 0;
 
     $('#go').click(() => {
-      let student = [];
-      grade = [];
+      let students = [];
+      grades = [];
 
 
       let name = $('#name').val();
 
       for (x = 0; x < 10; x++) {
-        grade.push(Math.floor(Math.random() * (100 - 50 + 1) + 50));
+        grades.push(Math.floor(Math.random() * (100 - 50 + 1) + 50));
       }
 
       let age = Math.floor(Math.random() * (18 - 10 +1) + 10);
-      let average = grade.reduce((a, b) => a + b, 0) / 10;
+      let average = grades.reduce((a, b) => a + b, 0) / grades.length;
 
       student = {
         name: name,
         age: age,
-        grade: grade,
+        grade: grades,
         average: average
       }
 
