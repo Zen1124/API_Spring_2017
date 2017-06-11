@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Registration</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <p>Username</p>
+    <input id="username"></input>
+    <p>Password</p>
+    <input type="password" id="password"></input>
+  </br>
+    <button id="submit">Submit</button>
+    <p hidden="true" id = "error">That password or username is already taken!</p>
+
+    <script>
+    let store = {};
+    $("#submit").click( () => {
+      let username = $("#username").val();
+      let password = $('#password').val();
+      $("#error").hide()
+
+      if (username == store.username || password == store.password) {
+        $("#error").show()
+      } else {
+        store.username = username;
+        store.password = password;
+      }
+      $("#username").val("");
+      $('#password').val("");
+    })
+    </script>
+  </body>
+</html>
