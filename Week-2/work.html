@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <button id="a">A</button>
+    <button id="b">B</button>
+    <script>
+    let a = [];
+    let b = [];
+    let average1 = 0;
+    let average2 = 0;
+    let sum = 0;
+    let computeSum = ()
+    $("#a").click(() => {
+      b.push(Math.floor(Math.random() * 100));
+      console.log(b);
+      //average1 = b.reduce(get)/b.length;
+      //console.log(average1)
+
+      b = b.reduce(getSum)
+      console.log(b)
+    })
+    $("#b").click(() => {
+      a.push(Math.floor(Math.random() * 100));
+      console.log(a);
+      average2 = a.reduce()/a.length;
+      console.log(average2)
+      a = a.reduce();
+      console.log(a);
+    })
+
+    </script>
+  </body>
+</html>

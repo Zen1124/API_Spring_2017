@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Classroom HW</title>
+    <style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <h2>Press go to go!</h2>
+  </br>
+    <button id="go">Go</button>
+    <table id = "myTable">
+    </table>
+    <script>
+
+    $('#go').click(() => {
+      let grade = [];
+      let hw = [];
+
+      let StudentConstructor = function(name, age, homework, exams, average, gpa) {
+        this.name = name;
+        this.age = age;
+        this.homework = homework;
+        this.exams = exams;
+        this.average = average;
+        this.gpa = gpa;
+      }
+
+      for (let x = 0; x < 15; x++) {
+        $.get("https://randomuser.me/api/", (response) => {
+          JSON.stringify(response);
+          let y = Math.floor(Math.random() * (2 - 1 + 1) + 1);
+          let z = Math.floor(Math.random() * (5 - 3 + 1) + 3);
+          for (x = 0; x < y; x++) {
+            grade.push(Math.floor(Math.random() * (100 - 50 + 1) + 50));
+          }
+          for (x = 0; x < z; x++) {
+            hw.push(Math.floor(Math.random() * (100 - 50 + 1) + 50));
+          }
+          let age = Math.floor(Math.random() * (18 - 10 +1) + 10);
+          let average = grade.reduce((a, b) => a + b, 0) / 10;
+          let name2 = response.results[0].name.first + " " + response.results[0].name.last;
+          console.log(new StudentConstructor(name2, age, 0, grade, average));
+        });
+      }
+      /*
+      let table = document.getElementById("myTable");
+      let row = table.insertRow(-1);
+      let row2 = table.insertRow(-1);
+      let row3 = table.insertRow(-1);
+      let Name1 = row.insertCell(0);
+      let Age1 = row.insertCell(1);
+      let Homework1 = row2.insertCell(0);
+      let Grade1 = row2.insertCell(1);
+      let Average1 = row3.insertCell(0);
+      let Gpa1 = row3.insertCell(1);
+      Name1.innerHTML = "STUDENT: " + student.name;
+      Age1.innerHTML = "Age: " + student.age;
+      Grade1.innerHTML = "Exams: " + student.exams;
+      Average1.innerHTML = "Average: " + student.average;
+      */
+    });
+    </script>
+  </body>
+</html>

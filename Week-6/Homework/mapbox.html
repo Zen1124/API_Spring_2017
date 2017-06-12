@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <meta charset="utf-8">
+    <title>Mapbox</title>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.35.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.35.1/mapbox-gl.css' rel='stylesheet' />
+  </head>
+  <style>
+        body {
+          margin:0; padding:0;
+        }
+        #map {
+          position:absolute; top:0; bottom:0; width:100%;
+        }
+    </style>
+  <body>
+    <div id='map'></div>
+    </div>
+    <script>
+      mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlZXNlMTIzIiwiYSI6ImNqMXFueTN2YzAwZ2EycW9icml2MHA4dDUifQ.SOWI5Q3qCP6YNbUfJMN2Jg';
+      let map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v9',
+        zoom: 18,
+        center: [-73.883243, 40.7327196]
+      });
+      map.on('load', () => {
+        $.get('http://api.openweathermap.org/data/2.5/weather?lat=40.7327196&lon=-73.883243&APPID=efcbfc328ccb52c897206f12a3954c5a&units=imperial', (response) => {
+          let temp = response.main.temp;
+          let temp_min = response.main.temp_min;
+          let temp_max = response.main.temp_max;
+          map.addLayer({
+              "id": "places",
+              "type": "symbol",
+              "source": {
+                  "type": "geojson",
+                  "data": {
+                      "type": "FeatureCollection",
+                      "features": [{
+                          "type": "Feature",
+                          "properties": {
+                              "description": `<strong>Saint Adalbert Catholic Academy</strong><p><a href=\"http://www.saintadalbertschoolny.org/\" target=\"_blank\" title=\"Opens in a new window\">St Adalbert Catholic Academy</a> is where I spend my weekdays 8 am to 6pm. <br><b>Temperature:</b> <br>Now: ${temp}°F <br>High: ${temp_max}°F <br>Low: ${temp_min}°F</p>`,
+                              "icon": "college"
+                          },
+                          "geometry": {
+                              "type": "Point",
+                              "coordinates": [-73.883243, 40.7327196]
+                          }
+                      }]
+                    }
+                },
+                "layout": {
+                  "icon-image": "{icon}-15",
+                  "icon-allow-overlap": true
+                  }
+          });
+        })
+
+        let popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        });
+
+        map.on('mouseenter', 'places', function(e) {
+            map.getCanvas().style.cursor = 'pointer';
+            popup.setLngLat(e.features[0].geometry.coordinates)
+                .setHTML(e.features[0].properties.description)
+                .addTo(map);
+        });
+
+        map.on('mouseleave', 'places', function() {
+            map.getCanvas().style.cursor = '';
+            popup.remove();
+        });
+      });
+    </script>
+  </body>
+</html>
