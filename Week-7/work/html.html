@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <title>API</title>
+  </head>
+  <body>
+    <div>
+      <div id ='name'>
+        <h1>Screen Name:</h1>
+      </div>
+      <div id ='favfood'>
+        <h1>Favorite Food:</h1>
+      </div>
+      <div id ='mood'>
+        <h1>Mood:</h1>
+      </div>
+      <div id ='timestamp'>
+        <h1>Time Stamp:</h1>
+      </div>
+    </div>
+    <script>
+      let public_key = 'E3DDvz0zxRiwm6QK37ow';
+      $.ajax({
+       url: 'http://data.sparkfun.com/output/E3DDvz0zxRiwm6QK37ow',
+       jsonp: 'callback',
+       cache: true,
+       dataType: 'jsonp',
+       data: {
+         page: 1
+       },
+       success: (response) => {
+         for (let x = 0; x < response.length; x++) {
+           if (response[x].favfood !== "pizza") {
+             $('#name').append(`<p>${response[x].screenname}</p>`);
+             $('#favfood').append(`<p>${response[x].favfood}</p>`);
+             $('#mood').append(`<p>${response[x].currentmood}</p>`);
+             $('#timestamp').append(`<p>${response[x].timestamp}</p>`)
+           }
+
+         }
+         console.log(response);
+       }
+      });
+
+      /*public_key = 'E3DDvz0zxRiwm6QK37ow';
+      $.ajax({
+        url: 'http://data.sparkfun.com/input/E3DDvz0zxRiwm6QK37ow.json?private_key=d1kk02j2v8Iv0o9dZpRv',
+        jsonp: 'callback',
+        cache: true,
+        dataType: 'jsonp',
+        data: {
+          screenname: 'galaxygoats',
+          favfood: 'minecraft parodies',
+          currentmood: 'diamonds'
+        },
+        success: function(response) {
+          console.log(response.message);
+        }
+      });*/
+    </script>
+  </body>
+</html>

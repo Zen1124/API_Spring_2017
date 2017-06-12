@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>War</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <style>
+    #alert {
+      font-size: 300px;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="top">
+    </div>
+    <h1>Your Hand</h1>
+    <div id="div">
+    </div>
+    <button id="war">War!</button>
+    <div id="div2">
+      <h1>Other Person</h1>
+    </div>
+
+    <script>
+      let cards = [];
+      let cardsimages = [];
+      let cards2 = [];
+      let cards2images = [];
+      let checkNum = (num, array) => {
+        if (num.includes("2") || num.includes("3") || num.includes("4") || num.includes("5") || num.includes("6") || num.includes("7") || num.includes("8") || num.includes("9") || num.includes("10")) {
+          num = parseInt(num);
+          array.push(num);
+        } else {
+          array.push(num);
+        }
+      }
+      let check =  (array) => {
+        let array2 = array;
+        for (let x = 0; x < array.length; x++) {
+          if (array[x] == "ACE") {
+              array[x] = 14;
+          } else if (array[x] == "KING") {
+              array[x] = 13;
+          } else if (array[x] == "QUEEN") {
+              array[x] = 12;
+          } else if (array[x] == "JACK") {
+              array[x] = 11;
+          }
+        }
+      }
+
+      $.get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1", (response) => {
+        $.get(`https://deckofcardsapi.com/api/deck/${response.deck_id}/draw/?count=26`, (response2) => {
+          for (let x = 0; x < response2.cards.length; x++) {
+            let card1image = response2.cards[x].image;
+            let card1 = response2.cards[x].value;
+            checkNum(card1, cards);
+            check(cards)
+            cardsimages.push(card1image);
+          }
+          console.log(cards[0]);
+          $("#div").append(`<img src = '${cardsimages[0]}'/>`);
+          $.get(`https://deckofcardsapi.com/api/deck/${response.deck_id}/draw/?count=26`, (response3) => {
+            for (let x = 0; x < response3.cards.length; x++) {
+              let card1image = response3.cards[x].image;
+              let card1 = response3.cards[x].value;
+              checkNum(card1, cards2);
+              check(cards2)
+              cards2images.push(card1image);
+            }
+            console.log(cards2[0]);
+            $("#div2").append(`<img src = '${cards2images[0]}'/>`);
+          })
+
+          $("#war").click(() => {
+            let lose = 0;
+            let win = 0;
+            let tie = 0;
+            console.log(cards.length)
+            for (let x = 0; x < cards.length; x++) {
+              if (cards2[x] > cards[x]) {
+                console.log(`You lose; You: ${cards[x]} Other: ${cards2[x]}`)
+                lose++;
+                cards2.push(cards[x]);
+                let index = cards.indexOf(cards[x]);
+                if (index > -1) {
+                    cards.splice(index, 1);
+                }
+                console.log(cards2[x]);
+                console.log(cards)
+              } else if (cards[x] > cards2[x]) {
+                console.log(`You win; You: ${cards[x]} Other: ${cards2[x]}`);
+                win++;
+                cards.push(cards2[x]);
+                let index = cards2.indexOf(cards2[x]);
+                if (index > -1) {
+                    cards2.splice(index, 1);
+                }
+                console.log(cards2[x]);
+                console.log(cards)
+              } else {
+                console.log(`War; You: ${cards[x]} Other: ${cards2[x]}`);
+                tie++;
+              }
+            }
+            console.log(cards.length)
+            console.log(cards2.length)
+            console.log(`Wins: ${win}`);
+            console.log(`Losses: ${lose}`);
+            console.log(`Ties: ${tie}`);
+          })
+        })
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <style>
+      #img {
+        border-radius: 50%;
+      }
+      #username {
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="div">
+
+    </div>
+    <script>
+    for(let x = 0; x < 100; x++) {
+      $.get("https://randomuser.me/api/", (response) => {
+            console.log(response.results[0].location)
+            let pic = response.results[0].picture.thumbnail;
+            let city = `${response.results[0].location.city}`;
+            let state = `${response.results[0].location.state}`;
+            $("#div").append(`<img id = 'img' src = '${pic}'/>
+                              <h1 id = "username">${response.results[0].login.username}</h1><br>
+                              <p>${response.results[0].name.first.charAt(0).toUpperCase() + response.results[0].name.first.slice(1) + " " + response.results[0].name.last.charAt(0).toUpperCase() + response.results[0].name.last.slice(1)}<p>
+                              <p>${city.charAt(0).toUpperCase() + city.slice(1) + ', ' + state.charAt(0).toUpperCase() + state.slice(1)}</p>
+                              <a href = 'https://unsplash.it/600?random&rand=${x}'>
+                                <img src = 'https://unsplash.it/600?random&rand=${x}'/>
+                              </a>
+                              <br>
+                              <br>
+                              `);
+      }
+    )}
+
+
+    </script>
+
+  </body>
+</html>
